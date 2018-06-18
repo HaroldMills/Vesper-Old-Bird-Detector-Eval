@@ -52,4 +52,6 @@ Thanks to the BirdVox team for creating this valuable dataset.
     
 This repository is part of the [Vesper](https://github.com/HaroldMills/Vesper) project.
 
+![Image of Zenodo DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.1292122.svg)
+
     
