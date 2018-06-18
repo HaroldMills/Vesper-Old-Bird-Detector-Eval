@@ -40,7 +40,7 @@ To run the scripts of this repository to reproduce the precision vs. recall plot
         python run_old_bird_detectors.py
         python evaluate_old_bird_detectors.py
     
-    The first script runs in about 2.5 hours on a 2012 MacBook Pro. The second script runs in less than a minute. For more details about the operation of the scripts, see the module docstrings of the scripts.
+    The first script runs in about 2.5 hours on a 2012 MacBook Pro. The second script runs in about two minutes. For more details about the operation of the scripts, see the module docstrings of the scripts.
     
 The citation for BirdVox-full-night is:
 
