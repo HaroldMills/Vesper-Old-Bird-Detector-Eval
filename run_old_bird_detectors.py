@@ -51,7 +51,7 @@ DETECTOR_CLASSES = {
 }
 
 # Wave file read chunk size in samples.
-CHUNK_SIZE = 1000000
+CHUNK_SIZE = 100000
 
 
 def main():
@@ -100,7 +100,7 @@ def run_detectors_on_one_recording(unit_num, post_enabled, listeners):
         [create_detector(sample_rate, post_enabled, l) for l in listeners]
         
     for i, samples in enumerate(generate_sample_buffers(reader)):
-        if i != 0 and i % 100 == 0:
+        if i != 0 and i % 1000 == 0:
             print('    Chunk {} of {}...'.format(i, num_chunks))
         for detector in detectors:
             detector.detect(samples[0])
