@@ -165,62 +165,58 @@ def count_old_bird_calls(old_bird_clips, ground_truth_call_center_indices):
 
 def match_clips_with_calls(clips, call_center_indices, window):
     
+    clip_windows = [get_clip_window(clip, window) for clip in clips]
+    
     clip_count = len(clips)
+    call_count = len(call_center_indices)
+    
+    i = 0
+    j = 0
     
     matches = []
-    i = 0
     
-    for j, call_center_index in enumerate(call_center_indices):
+    while i != clip_count and j != call_count:
         
-        while i != clip_count and \
-                get_end_index(clips[i]) <= call_center_index:
-            # Old Bird clip i ends before call center
+        window_start_index, window_end_index = clip_windows[i]
+        call_center_index = call_center_indices[j]
+        
+        if window_end_index <= call_center_index:
+            # clip window i precedes call center j
             
             i += 1
             
-        if i == clip_count:
-            # no more Old Bird clips
+        elif window_start_index > call_center_index:
+            # clip window i follows call center j
             
-            break
+            j += 1
             
-        # At this point Old Bird clip i is the first Old Bird clip
-        # that has not already been paired with a call center and
-        # that ends after call center j.
-        
-        if is_call_detection(clips[i], call_center_index, window):
-                
+        else:
+            # clip window i includes call center j
+                        
             matches.append((i, j))
-            # Increment i to ensure that we match each Old Bird clip
-            # with at most one ground truth call. This is conservative,
-            # since some Old Bird clips contain more than one ground
-            # truth call.
+            
             i += 1
+            j += 1
             
     return matches
             
 
-def get_end_index(clip):
-    start_index, length = clip
-    return start_index + length
-
-
-def is_call_detection(clip, call_center_index, window):
-    
-    """
-    Tests if the specified Old Bird clip should count as a detection of
-    a call with the specified center index, i.e. if the center index is
-    within the specified detection window within the clip.
-    """
+def get_clip_window(clip, window):
     
     clip_start_index, clip_length = clip
     clip_end_index = clip_start_index + clip_length
+    
     window_start_offset, window_length = window
-    window_start_index = clip_start_index + window_start_offset
-    window_end_index = min(window_start_index + window_length, clip_end_index)
-    return window_start_index <= call_center_index and \
-        call_center_index < window_end_index
+    
+    window_start_index = min(
+        clip_start_index + window_start_offset, clip_end_index)
+        
+    window_end_index = min(
+        window_start_index + window_length, clip_end_index)
+    
+    return (window_start_index, window_end_index)
 
-
+    
 def create_raw_df(rows):
     
     columns = [
